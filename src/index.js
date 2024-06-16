@@ -1,17 +1,19 @@
-let content = document.getElementById('content');
-let search = document.getElementById('search');
-
 import './style.css';
 import { helloLocation } from './weather.js';
 
+let content = document.getElementById('content');
+let search = document.getElementById('search');
+
 let locationData = ['country', 'region', 'localtime', 'tz_id'];
 let currentData = ['temp_c', 'feelslike_c', 'wind_kph'];
+let lastSearchedArea = '';
 
 function searchLoader() {
     let input = document.createElement('input');
     let button = document.createElement('button');
     button.innerText = "Submit";
     button.addEventListener('click', () => {
+        lastSearchedArea = input.value;
         helloLocation(input.value);
     });
     search.appendChild(input);
@@ -33,6 +35,9 @@ function buttonLoader() {
         } else {
             currentData = ['temp_c', 'feelslike_c', 'wind_kph'];
         }
+        if(content.lastChild) {
+            helloLocation(lastSearchedArea);
+        };
     });
 
     label.appendChild(input);
@@ -45,6 +50,10 @@ function locationDisplay(data) {
         content.removeChild(content.lastChild);
     };
     console.log(data);
+
+    let name = document.createElement('p');
+    name.innerText = `Name: ${lastSearchedArea}`;
+    content.appendChild(name);
 
     for(let item of locationData) {
         let dataElement = document.createElement('p');
